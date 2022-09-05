@@ -1,0 +1,16 @@
+#todo-list{
+  overflow-y: auto ;
+  list-style-type: none;
+  height: 200px;
+  padding: 0;
+}
+.todo{
+  display: flex;
+  font-family: 'Montserrat', sans-serif;
+  margin: 20px;
+  font-size: 16px;
+
+  input{
+    margin-right: 5px;
+  }
+}

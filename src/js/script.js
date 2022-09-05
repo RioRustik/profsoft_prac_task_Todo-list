@@ -1,15 +1,54 @@
-// const todotemplete = document.querySelector('#todo-list').content
+const list = document.querySelector('#todo-list');
+const template = document.querySelector('#template');
+const addBtnTask = document.querySelector('.btn-add-task');
+const contentText = document.querySelector('.field-add-task');
 
-// const todo = todotemplete.querySelector('.todo')
+let listTasks = JSON.parse(localStorage.getItem('tasks')) || []
 
-const list = document.querySelector('.list')
-const template = document.querySelector('#template')
+if(listTasks.length !== 0){
+    update();
+}
+function addTask() {
+  if (contentText.value == "") {
+    return;
+  };
+  
+  const newElem = {
+    id: listTasks.length,
+    content: contentText.value,
+  };
+  
+  listTasks.push(newElem);
+  localStorage.setItem('tasks', JSON.stringify(listTasks));
+  
+  list.innerHTML = "";
+  update();
+  contentText.value = "";
+}
+function displayTask(task) {
+  const item = template.content.cloneNode(true);
+  const li = item.querySelector('li');
+  const checkbox = item.querySelector('input');
 
-// Клонируем содержимое тега <template>
-const item = template.content.cloneNode(true)
+  li.textContent = task.content;
+  list.append(item);
 
-// Находим тег <li> и помещаем текст внутрь
-item.querySelector('li').textContent = 'Молоко'
+  const deleteTask = (e) => {
+    listTasks = listTasks.filter((list) => list.id !== task.id);
+    localStorage.setItem('tasks', JSON.stringify(listTasks));
+    list.innerHTML = "";
+    update();
+  };
 
-// Вставляем склонированный контент на страницу
-list.append(item)
+  checkbox.addEventListener('change', function () {
+    setTimeout(deleteTask, 500);
+  });
+}
+
+function update() {
+  for (let task of listTasks) {
+    displayTask(task);
+  }
+}
+
+addBtnTask.addEventListener('click', addTask);
